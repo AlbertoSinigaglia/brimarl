@@ -7,12 +7,11 @@ import brimarl_masked.environment.environment as brisc
 from brimarl_masked.environment.utils import BriscolaLogger, NetworkTypes
 from brimarl_masked.environment.emulate import play_episode
 from tqdm import trange
-
+import  tensorflow as tf
 def evaluate(game, agents, num_evaluations):
     """Play num_evaluations games and report statistics."""
     total_wins = [0] * len(agents)
     points_history = [[] for _ in range(len(agents))]
-
     for _ in trange(num_evaluations):
         game_winner_id, winner_points = play_episode(game, agents, train=False)
         for player in game.players:

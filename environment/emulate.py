@@ -65,6 +65,8 @@ def play_episode(game: BriscolaGame, agents: List[Agent], train=True):
            and len(rewards[0]) == len(masks[0])
 
     end_game = game.end_game()
+    for agent, player in zip(agents, game.players):
+        agent.end_game(game, player)
     if train:
         return states, actions, masks, rewards, dones
     else:

@@ -1,5 +1,4 @@
 from brimarl_masked.algorithms.ema import ExponentialMovingStdDev
-from brimarl_masked.algorithms.replay_memory import ReplayMemory
 import tensorflow as tf
 import numpy as np
 from brimarl_masked.agents.ac_agent import ACAgent
@@ -11,6 +10,7 @@ class PPOAlgorithm(Algorithm):
                  num_learning_per_epoch_actor=6, num_learning_per_epoch_critic=3, clip_eps=0.1,
                  lr_actor=1e-4, lr_critic=3e-4):
         # self.batch_size = batch_size
+        super().__init__()
         self.num_players = num_players
         self.discount = discount
         self.optimizer_actor = tf.optimizers.legacy.Adam(lr_actor)
@@ -163,3 +163,8 @@ class PPOAlgorithm(Algorithm):
         self.d = []
 
         return loss / (iterations + 1e-10)
+
+
+
+
+

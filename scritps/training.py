@@ -9,7 +9,7 @@ from brimarl_masked.scritps.evaluate import evaluate
 from brimarl_masked.algorithms.algorithm import Algorithm
 from brimarl_masked.environment.environment import Agent, BriscolaGame
 import json
-
+import time
 
 def print_win_rate(epoch, name, win_rate):
     print(f"Episode: {epoch} - Win rate {name}: {win_rate}")
@@ -35,9 +35,12 @@ class Training:
         self.prepare_saving_folder()
 
         loss = None
+        start = time.time()
         for epoch in range(1, self.num_epochs + 1):
             if epoch % 50 == 0:
                 print(f"\nEpoch {epoch}")
+                t = int((time.time() - start) / epoch * (self.num_epochs - epoch))
+                print(f"Estimated remaining time: {t//3600}h {(t%3600)//60}m {t%60}s")
             else:
                 print('.', end='')
 
@@ -175,8 +178,8 @@ class TrainingSelfPlayMAPPO(TrainingSelfPlay):
 class TrainingFictitiousSelfPlay(Training):
     def __init__(self, num_epochs: int, num_game_per_epoch: int, game: BriscolaGame, agent: Agent,
                  agent_algorithm: Algorithm, evaluate_every: int, num_evaluations: int, from_savings: bool = False,
-                 save_dir: str = None, store_every: int = 50, max_old_agents: int = 20,
-                 current_agent_prob: float = 0.5):
+                 save_dir: str = None, store_every: int = 20, max_old_agents: int = 20,
+                 current_agent_prob: float = .5):
         super().__init__(num_epochs, num_game_per_epoch, game, agent, agent_algorithm, evaluate_every, num_evaluations,
                          from_savings, save_dir)
         self.store_every = store_every

@@ -1,444 +1,300 @@
-------------------------------
 Epoch 1000 / 1000000
-Win rate Scripted: 0.178
-Win rate Random: 0.51
-------------------------------
+Win rate Scripted: 0.178,
+Win rate Random: 0.51,
 Epoch 2000 / 1000000
-Win rate Scripted: 0.176
-Win rate Random: 0.546
-------------------------------
+Win rate Scripted: 0.176,
+Win rate Random: 0.546,
 Epoch 3000 / 1000000
-Win rate Scripted: 0.182
-Win rate Random: 0.538
-------------------------------
+Win rate Scripted: 0.182,
+Win rate Random: 0.538,
 Epoch 4000 / 1000000
-Win rate Scripted: 0.194
-Win rate Random: 0.574
-------------------------------
+Win rate Scripted: 0.194,
+Win rate Random: 0.574,
 Epoch 5000 / 1000000
-Win rate Scripted: 0.18
-Win rate Random: 0.59
-------------------------------
+Win rate Scripted: 0.18,
+Win rate Random: 0.59,
 Epoch 6000 / 1000000
-Win rate Scripted: 0.17
-Win rate Random: 0.59
-------------------------------
+Win rate Scripted: 0.17,
+Win rate Random: 0.59,
 Epoch 7000 / 1000000
-Win rate Scripted: 0.218
-Win rate Random: 0.578
-------------------------------
+Win rate Scripted: 0.218,
+Win rate Random: 0.578,
 Epoch 8000 / 1000000
-Win rate Scripted: 0.19
-Win rate Random: 0.614
-------------------------------
+Win rate Scripted: 0.19,
+Win rate Random: 0.614,
 Epoch 9000 / 1000000
-Win rate Scripted: 0.206
-Win rate Random: 0.646
-------------------------------
+Win rate Scripted: 0.206,
+Win rate Random: 0.646,
 Epoch 10000 / 1000000
-Win rate Scripted: 0.204
-Win rate Random: 0.646
-------------------------------
+Win rate Scripted: 0.204,
+Win rate Random: 0.646,
 Epoch 11000 / 1000000
-Win rate Scripted: 0.24
-Win rate Random: 0.598
-------------------------------
+Win rate Scripted: 0.24,
+Win rate Random: 0.598,
 Epoch 12000 / 1000000
-Win rate Scripted: 0.25
-Win rate Random: 0.662
-------------------------------
+Win rate Scripted: 0.25,
+Win rate Random: 0.662,
 Epoch 13000 / 1000000
-Win rate Scripted: 0.232
-Win rate Random: 0.66
-------------------------------
+Win rate Scripted: 0.232,
+Win rate Random: 0.66,
 Epoch 14000 / 1000000
-Win rate Scripted: 0.248
-Win rate Random: 0.7
-------------------------------
+Win rate Scripted: 0.248,
+Win rate Random: 0.7,
 Epoch 15000 / 1000000
-Win rate Scripted: 0.294
-Win rate Random: 0.722
-------------------------------
+Win rate Scripted: 0.294,
+Win rate Random: 0.722,
 Epoch 16000 / 1000000
-Win rate Scripted: 0.328
-Win rate Random: 0.722
-------------------------------
+Win rate Scripted: 0.328,
+Win rate Random: 0.722,
 Epoch 17000 / 1000000
-Win rate Scripted: 0.296
-Win rate Random: 0.676
-------------------------------
+Win rate Scripted: 0.296,
+Win rate Random: 0.676,
 Epoch 18000 / 1000000
-Win rate Scripted: 0.292
-Win rate Random: 0.69
-------------------------------
+Win rate Scripted: 0.292,
+Win rate Random: 0.69,
 Epoch 19000 / 1000000
-Win rate Scripted: 0.33
-Win rate Random: 0.722
-------------------------------
+Win rate Scripted: 0.33,
+Win rate Random: 0.722,
 Epoch 20000 / 1000000
-Win rate Scripted: 0.326
-Win rate Random: 0.766
-------------------------------
+Win rate Scripted: 0.326,
+Win rate Random: 0.766,
 Epoch 21000 / 1000000
-Win rate Scripted: 0.348
-Win rate Random: 0.766
-------------------------------
+Win rate Scripted: 0.348,
+Win rate Random: 0.766,
 Epoch 22000 / 1000000
-Win rate Scripted: 0.352
-Win rate Random: 0.698
-------------------------------
+Win rate Scripted: 0.352,
+Win rate Random: 0.698,
 Epoch 23000 / 1000000
-Win rate Scripted: 0.368
-Win rate Random: 0.732
-------------------------------
+Win rate Scripted: 0.368,
+Win rate Random: 0.732,
 Epoch 24000 / 1000000
-Win rate Scripted: 0.358
-Win rate Random: 0.778
-------------------------------
+Win rate Scripted: 0.358,
+Win rate Random: 0.778,
 Epoch 25000 / 1000000
-Win rate Scripted: 0.372
-Win rate Random: 0.764
-------------------------------
+Win rate Scripted: 0.372,
+Win rate Random: 0.764,
 Epoch 26000 / 1000000
-Win rate Scripted: 0.342
-Win rate Random: 0.75
-------------------------------
+Win rate Scripted: 0.342,
+Win rate Random: 0.75,
 Epoch 27000 / 1000000
-Win rate Scripted: 0.352
-Win rate Random: 0.752
-------------------------------
+Win rate Scripted: 0.352,
+Win rate Random: 0.752,
 Epoch 28000 / 1000000
-Win rate Scripted: 0.4
-Win rate Random: 0.764
-------------------------------
+Win rate Scripted: 0.4,
+Win rate Random: 0.764,
 Epoch 29000 / 1000000
-Win rate Scripted: 0.432
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.432,
+Win rate Random: 0.782,
 Epoch 30000 / 1000000
-Win rate Scripted: 0.374
-Win rate Random: 0.78
-------------------------------
+Win rate Scripted: 0.374,
+Win rate Random: 0.78,
 Epoch 31000 / 1000000
-Win rate Scripted: 0.406
-Win rate Random: 0.774
-------------------------------
+Win rate Scripted: 0.406,
+Win rate Random: 0.774,
 Epoch 32000 / 1000000
-Win rate Scripted: 0.418
-Win rate Random: 0.83
-------------------------------
+Win rate Scripted: 0.418,
+Win rate Random: 0.83,
 Epoch 33000 / 1000000
-Win rate Scripted: 0.408
-Win rate Random: 0.786
-------------------------------
+Win rate Scripted: 0.408,
+Win rate Random: 0.786,
 Epoch 34000 / 1000000
-Win rate Scripted: 0.426
-Win rate Random: 0.766
-------------------------------
+Win rate Scripted: 0.426,
+Win rate Random: 0.766,
 Epoch 35000 / 1000000
-Win rate Scripted: 0.422
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.422,
+Win rate Random: 0.782,
 Epoch 36000 / 1000000
-Win rate Scripted: 0.408
-Win rate Random: 0.77
-------------------------------
+Win rate Scripted: 0.408,
+Win rate Random: 0.77,
 Epoch 37000 / 1000000
-Win rate Scripted: 0.408
-Win rate Random: 0.77
-------------------------------
+Win rate Scripted: 0.408,
+Win rate Random: 0.77,
 Epoch 38000 / 1000000
-Win rate Scripted: 0.46
-Win rate Random: 0.76
-------------------------------
+Win rate Scripted: 0.46,
+Win rate Random: 0.76,
 Epoch 39000 / 1000000
-Win rate Scripted: 0.474
-Win rate Random: 0.778
-------------------------------
+Win rate Scripted: 0.474,
+Win rate Random: 0.778,
 Epoch 40000 / 1000000
-Win rate Scripted: 0.412
-Win rate Random: 0.796
-------------------------------
+Win rate Scripted: 0.412,
+Win rate Random: 0.796,
 Epoch 41000 / 1000000
-Win rate Scripted: 0.446
-Win rate Random: 0.802
-------------------------------
+Win rate Scripted: 0.446,
+Win rate Random: 0.802,
 Epoch 42000 / 1000000
-Win rate Scripted: 0.456
-Win rate Random: 0.762
-------------------------------
+Win rate Scripted: 0.456,
+Win rate Random: 0.762,
 Epoch 43000 / 1000000
-Win rate Scripted: 0.434
-Win rate Random: 0.792
-------------------------------
+Win rate Scripted: 0.434,
+Win rate Random: 0.792,
 Epoch 44000 / 1000000
-Win rate Scripted: 0.43
-Win rate Random: 0.798
-------------------------------
+Win rate Scripted: 0.43,
+Win rate Random: 0.798,
 Epoch 45000 / 1000000
-Win rate Scripted: 0.416
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.416,
+Win rate Random: 0.782,
 Epoch 46000 / 1000000
-Win rate Scripted: 0.482
-Win rate Random: 0.772
-------------------------------
+Win rate Scripted: 0.482,
+Win rate Random: 0.772,
 Epoch 47000 / 1000000
-Win rate Scripted: 0.466
-Win rate Random: 0.778
-------------------------------
+Win rate Scripted: 0.466,
+Win rate Random: 0.778,
 Epoch 48000 / 1000000
-Win rate Scripted: 0.48
-Win rate Random: 0.76
-------------------------------
+Win rate Scripted: 0.48,
+Win rate Random: 0.76,
 Epoch 49000 / 1000000
-Win rate Scripted: 0.456
-Win rate Random: 0.784
-------------------------------
+Win rate Scripted: 0.456,
+Win rate Random: 0.784,
 Epoch 50000 / 1000000
-Win rate Scripted: 0.43
-Win rate Random: 0.758
-------------------------------
+Win rate Scripted: 0.43,
+Win rate Random: 0.758,
 Epoch 51000 / 1000000
-Win rate Scripted: 0.454
-Win rate Random: 0.766
-------------------------------
+Win rate Scripted: 0.454,
+Win rate Random: 0.766,
 Epoch 52000 / 1000000
-Win rate Scripted: 0.486
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.486,
+Win rate Random: 0.782,
 Epoch 53000 / 1000000
-Win rate Scripted: 0.496
-Win rate Random: 0.768
-------------------------------
+Win rate Scripted: 0.496,
+Win rate Random: 0.768,
 Epoch 54000 / 1000000
-Win rate Scripted: 0.478
-Win rate Random: 0.79
-------------------------------
+Win rate Scripted: 0.478,
+Win rate Random: 0.79,
 Epoch 55000 / 1000000
-Win rate Scripted: 0.49
-Win rate Random: 0.766
-------------------------------
+Win rate Scripted: 0.49,
+Win rate Random: 0.766,
 Epoch 56000 / 1000000
-Win rate Scripted: 0.46
-Win rate Random: 0.778
-------------------------------
+Win rate Scripted: 0.46,
+Win rate Random: 0.778,
 Epoch 57000 / 1000000
-Win rate Scripted: 0.478
-Win rate Random: 0.786
-------------------------------
+Win rate Scripted: 0.478,
+Win rate Random: 0.786,
 Epoch 58000 / 1000000
-Win rate Scripted: 0.438
-Win rate Random: 0.774
-------------------------------
+Win rate Scripted: 0.438,
+Win rate Random: 0.774,
 Epoch 59000 / 1000000
-Win rate Scripted: 0.49
-Win rate Random: 0.744
-------------------------------
+Win rate Scripted: 0.49,
+Win rate Random: 0.744,
 Epoch 60000 / 1000000
-Win rate Scripted: 0.422
-Win rate Random: 0.75
-------------------------------
+Win rate Scripted: 0.422,
+Win rate Random: 0.75,
 Epoch 61000 / 1000000
-Win rate Scripted: 0.456
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.456,
+Win rate Random: 0.782,
 Epoch 62000 / 1000000
-Win rate Scripted: 0.508
-Win rate Random: 0.774
-------------------------------
+Win rate Scripted: 0.508,
+Win rate Random: 0.774,
 Epoch 63000 / 1000000
-Win rate Scripted: 0.47
-Win rate Random: 0.792
-------------------------------
+Win rate Scripted: 0.47,
+Win rate Random: 0.792,
 Epoch 64000 / 1000000
-Win rate Scripted: 0.494
-Win rate Random: 0.758
-------------------------------
+Win rate Scripted: 0.494,
+Win rate Random: 0.758,
 Epoch 65000 / 1000000
-Win rate Scripted: 0.488
-Win rate Random: 0.79
-------------------------------
+Win rate Scripted: 0.488,
+Win rate Random: 0.79,
 Epoch 66000 / 1000000
-Win rate Scripted: 0.452
-Win rate Random: 0.754
-------------------------------
+Win rate Scripted: 0.452,
+Win rate Random: 0.754,
 Epoch 67000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.776
-------------------------------
+Win rate Scripted: 0.468,
+Win rate Random: 0.776,
 Epoch 68000 / 1000000
-Win rate Scripted: 0.512
-Win rate Random: 0.776
-------------------------------
+Win rate Scripted: 0.512,
+Win rate Random: 0.776,
 Epoch 69000 / 1000000
-Win rate Scripted: 0.484
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.484,
+Win rate Random: 0.782,
 Epoch 70000 / 1000000
-Win rate Scripted: 0.462
-Win rate Random: 0.786
-------------------------------
+Win rate Scripted: 0.462,
+Win rate Random: 0.786,
 Epoch 71000 / 1000000
-Win rate Scripted: 0.488
-Win rate Random: 0.788
-------------------------------
+Win rate Scripted: 0.488,
+Win rate Random: 0.788,
 Epoch 72000 / 1000000
-Win rate Scripted: 0.462
-Win rate Random: 0.788
-------------------------------
+Win rate Scripted: 0.462,
+Win rate Random: 0.788,
 Epoch 73000 / 1000000
-Win rate Scripted: 0.446
-Win rate Random: 0.764
-------------------------------
+Win rate Scripted: 0.446,
+Win rate Random: 0.764,
 Epoch 74000 / 1000000
-Win rate Scripted: 0.498
-Win rate Random: 0.754
-------------------------------
+Win rate Scripted: 0.498,
+Win rate Random: 0.754,
 Epoch 75000 / 1000000
-Win rate Scripted: 0.492
-Win rate Random: 0.794
-------------------------------
+Win rate Scripted: 0.492,
+Win rate Random: 0.794,
 Epoch 76000 / 1000000
-Win rate Scripted: 0.49
-Win rate Random: 0.782
-------------------------------
+Win rate Scripted: 0.49,
+Win rate Random: 0.782,
 Epoch 77000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.762
-------------------------------
+Win rate Scripted: 0.468,
+Win rate Random: 0.762,
 Epoch 78000 / 1000000
-Win rate Scripted: 0.436
-Win rate Random: 0.798
-------------------------------
+Win rate Scripted: 0.436,
+Win rate Random: 0.798,
 Epoch 79000 / 1000000
-Win rate Scripted: 0.496
-Win rate Random: 0.762
-------------------------------
+Win rate Scripted: 0.496,
+Win rate Random: 0.762,
 Epoch 80000 / 1000000
-Win rate Scripted: 0.484
-Win rate Random: 0.814
-------------------------------
+Win rate Scripted: 0.484,
+Win rate Random: 0.814,
 Epoch 81000 / 1000000
-Win rate Scripted: 0.482
-Win rate Random: 0.784
-------------------------------
+Win rate Scripted: 0.482,
+Win rate Random: 0.784,
 Epoch 82000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.788
-------------------------------
+Win rate Scripted: 0.468,
+Win rate Random: 0.788,
 Epoch 83000 / 1000000
-Win rate Scripted: 0.496
-Win rate Random: 0.774
-------------------------------
+Win rate Scripted: 0.496,
+Win rate Random: 0.774,
 Epoch 84000 / 1000000
-Win rate Scripted: 0.492
-Win rate Random: 0.788
-------------------------------
+Win rate Scripted: 0.492,
+Win rate Random: 0.788,
 Epoch 85000 / 1000000
-Win rate Scripted: 0.5
-Win rate Random: 0.81
-------------------------------
+Win rate Scripted: 0.5,
+Win rate Random: 0.81,
 Epoch 86000 / 1000000
-Win rate Scripted: 0.542
-Win rate Random: 0.8
-------------------------------
+Win rate Scripted: 0.542,
+Win rate Random: 0.8,
 Epoch 87000 / 1000000
-Win rate Scripted: 0.498
-Win rate Random: 0.808
-------------------------------
+Win rate Scripted: 0.498,
+Win rate Random: 0.808,
 Epoch 88000 / 1000000
-Win rate Scripted: 0.43
-Win rate Random: 0.828
-------------------------------
+Win rate Scripted: 0.43,
+Win rate Random: 0.828,
 Epoch 89000 / 1000000
-Win rate Scripted: 0.506
-Win rate Random: 0.792
-------------------------------
+Win rate Scripted: 0.506,
+Win rate Random: 0.792,
 Epoch 90000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.792
-------------------------------
+Win rate Scripted: 0.468,
+Win rate Random: 0.792,
 Epoch 91000 / 1000000
-Win rate Scripted: 0.494
-Win rate Random: 0.82
-------------------------------
+Win rate Scripted: 0.494,
+Win rate Random: 0.82,
 Epoch 92000 / 1000000
-Win rate Scripted: 0.494
-Win rate Random: 0.752
-------------------------------
+Win rate Scripted: 0.494,
+Win rate Random: 0.752,
 Epoch 93000 / 1000000
-Win rate Scripted: 0.486
-Win rate Random: 0.838
-------------------------------
+Win rate Scripted: 0.486,
+Win rate Random: 0.838,
 Epoch 94000 / 1000000
-Win rate Scripted: 0.464
-Win rate Random: 0.818
-------------------------------
+Win rate Scripted: 0.464,
+Win rate Random: 0.818,
 Epoch 95000 / 1000000
-Win rate Scripted: 0.462
-Win rate Random: 0.806
-------------------------------
+Win rate Scripted: 0.462,
+Win rate Random: 0.806,
 Epoch 96000 / 1000000
-Win rate Scripted: 0.474
-Win rate Random: 0.806
-------------------------------
+Win rate Scripted: 0.474,
+Win rate Random: 0.806,
 Epoch 97000 / 1000000
-Win rate Scripted: 0.522
-Win rate Random: 0.824
-------------------------------
+Win rate Scripted: 0.522,
+Win rate Random: 0.824,
 Epoch 98000 / 1000000
-Win rate Scripted: 0.486
-Win rate Random: 0.806
-------------------------------
+Win rate Scripted: 0.486,
+Win rate Random: 0.806,
 Epoch 99000 / 1000000
-Win rate Scripted: 0.504
-Win rate Random: 0.792
-------------------------------
+Win rate Scripted: 0.504,
+Win rate Random: 0.792,
 Epoch 100000 / 1000000
-Win rate Scripted: 0.48
-Win rate Random: 0.794
-------------------------------
-Epoch 101000 / 1000000
-Win rate Scripted: 0.498
-Win rate Random: 0.794
-------------------------------
-Epoch 102000 / 1000000
-Win rate Scripted: 0.464
-Win rate Random: 0.808
-------------------------------
-Epoch 103000 / 1000000
-Win rate Scripted: 0.492
-Win rate Random: 0.824
-------------------------------
-Epoch 104000 / 1000000
-Win rate Scripted: 0.464
-Win rate Random: 0.818
-------------------------------
-Epoch 105000 / 1000000
-Win rate Scripted: 0.486
-Win rate Random: 0.8
-------------------------------
-Epoch 106000 / 1000000
-Win rate Scripted: 0.51
-Win rate Random: 0.83
-------------------------------
-Epoch 107000 / 1000000
-Win rate Scripted: 0.5
-Win rate Random: 0.808
-------------------------------
-Epoch 108000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.844
-------------------------------
-Epoch 109000 / 1000000
-Win rate Scripted: 0.422
-Win rate Random: 0.818
-------------------------------
-Epoch 110000 / 1000000
-Win rate Scripted: 0.466
-Win rate Random: 0.794
-------------------------------
-Epoch 111000 / 1000000
-Win rate Scripted: 0.468
-Win rate Random: 0.814
+Win rate Scripted: 0.48,
+Win rate Random: 0.794,

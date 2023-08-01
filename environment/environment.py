@@ -168,6 +168,7 @@ class BriscolaGame:
         self.binary_reward = binary_reward
 
     def clone(self):
+        raise NotImplementedError
         return BriscolaGame(self.num_players, self.logger, self.win_extra_points, binary_reward=self.binary_reward)
 
     def reset(self):
@@ -357,8 +358,20 @@ class BriscolaGame:
         self.players_order = self.get_players_order()
         self.counter += 1
 
+import itertools
+class BriscolaGameID(BriscolaGame):
+    id_iter = itertools.count()
 
+    def __init__(self, num_players=2, logger=BriscolaLogger(), win_extra_points=100, binary_reward=False):
+        super().__init__(num_players, logger, win_extra_points, binary_reward)
+        self.id = next(BriscolaGameID.id_iter)
 
+    def clone(self):
+        return super().clone()
+
+    def reset(self):
+        self.id = next(BriscolaGameID.id_iter)
+        super().reset()
 
 
 def get_weakest_card(briscola_seed, cards):
@@ -425,6 +438,9 @@ class Agent:
 
     def action(self, game: BriscolaGame, player: BriscolaPlayer):
         raise NotImplementedError(f"method select_action not implemented for agent {self.name}")
+
+    def end_game(self, game: BriscolaGame, player: BriscolaPlayer):
+        pass
 
     def save_model(self, path: str):
         raise NotImplementedError(f"method save_model not implemented for agent {self.name}")

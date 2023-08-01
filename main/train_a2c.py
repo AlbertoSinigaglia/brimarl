@@ -1,23 +1,19 @@
-from brimarl_masked.scritps.self_train import train_against_self
+from brimarl_masked.scritps.self_train import train_against_self, train_against_scripted
 from brimarl_masked.agents.ac_agent import ACAgent
 from brimarl_masked.algorithms.a2c import A2CAlgorithm
-from brimarl_masked.environment.environment import BriscolaLogger, BriscolaGame
+from brimarl_masked.environment.environment import BriscolaLogger, BriscolaGameID
 import numpy as np
 
 def main(argv=None):
     np.set_printoptions(linewidth=500, threshold=np.inf)
     logger = BriscolaLogger(BriscolaLogger.LoggerLevels.TRAIN)
-    game = BriscolaGame(2, logger, win_extra_points=0)
-
-    # agent = DeepQAgent(0.99, 0.05, 1e-3)
+    game = BriscolaGameID(2, logger, win_extra_points=0)
     agent = ACAgent()
-    # agent = RecurrentDeepQAgent(40, 0.9, 0.05, 1e-3)
-    # agent = ACQAgent()
-    episodes = 1000000
+    episodes = 10000
     evaluate_every = 1000
     num_evaluation = 500
     print("A2C 1e-4 3e-4 128 samples")
-    _, rewards_per_episode = train_against_self(
+    _, rewards_per_episode = train_against_scripted(
         game,
         agent,
         # A2CClippedAlgorithm(2, 1., 1, ),

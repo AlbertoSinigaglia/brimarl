@@ -6,6 +6,7 @@ class BriscolaLogger:
         PVP = 1
         TRAIN = 2
         TEST = 3
+        NONE = 4
 
     def __init__(self, verbosity=3):
         self.TEST = None
@@ -35,6 +36,11 @@ class BriscolaLogger:
             self.TRAIN = print
 
         self.TEST = print
+        if verbosity == self.LoggerLevels.NONE:
+            self.TRAIN = lambda *args: None
+            self.DEBUG = lambda *args: None
+            self.TEST = lambda *args: None
+            self.PVP = lambda *args: None
 
 
 class CardsEncoding:

@@ -1,3 +1,7 @@
+from concurrent.futures import ProcessPoolExecutor
+from itertools import repeat
+
+from brimarl_masked.algorithms.ema import ExponentialMovingStdDev
 from brimarl_masked.algorithms.replay_memory import ReplayMemory
 import tensorflow as tf
 import numpy as np
@@ -7,17 +11,19 @@ from brimarl_masked.algorithms.algorithm import Algorithm
 
 class A2CClippedAlgorithm(Algorithm):
     def __init__(self, num_players, discount=1., min_samples=128, epsilon=1e-8,
-                 num_learning_per_epoch_actor=10, num_learning_per_epoch_critic=3, clip_eps=0.1):
+                 num_learning_per_epoch_actor=6, num_learning_per_epoch_critic=3, clip_eps=0.1,
+                 lr_actor=1e-4, lr_critic=3e-4):
         # self.batch_size = batch_size
         self.num_players = num_players
         self.discount = discount
-        self.optimizer_actor = tf.optimizers.legacy.Adam(3e-4)
-        self.optimizer_critic = tf.optimizers.legacy.Adam(6e-4)
+        self.optimizer_actor = tf.optimizers.legacy.Adam(lr_actor)
+        self.optimizer_critic = tf.optimizers.legacy.Adam(lr_critic)
         self.num_learning_per_epoch_actor = num_learning_per_epoch_actor
         self.num_learning_per_epoch_critic = num_learning_per_epoch_critic
         self.epsilon = epsilon
         self.min_samples = min_samples
         self.clip_eps = clip_eps
+        self.sigma_ema = ExponentialMovingStdDev()
 
         self.s = []
         self.a = []
@@ -65,7 +71,6 @@ class A2CClippedAlgorithm(Algorithm):
         self.sn = np.array(self.sn).squeeze()
         self.d = np.array(self.d)[..., None]
         self.m = np.array(self.m)
-
         BS = self.s.shape[0]
 
         self.assert_same_shape(self.s, (BS, self.s.shape[1]))
@@ -74,6 +79,9 @@ class A2CClippedAlgorithm(Algorithm):
         self.assert_same_shape(self.sn, self.s)
         self.assert_same_shape(self.d, (BS, 1))
         self.assert_same_shape(self.m, self.a)
+
+        self.sigma_ema.update(self.r)
+        self.r = self.r / (self.sigma_ema.get_stddev() + self.epsilon)
 
         loss = 0.
         iterations = 0.
@@ -86,7 +94,7 @@ class A2CClippedAlgorithm(Algorithm):
         self.assert_same_shape(val, (BS, 1))
         self.assert_same_shape(new_val, (BS, 1))
 
-        reward_to_go = tf.stop_gradient(self.r + self.discount * new_val * (1-self.d))
+        reward_to_go = tf.stop_gradient(self.r + self.discount * new_val * (1 - self.d))
         td_error = reward_to_go - val
         self.assert_same_shape(reward_to_go, (BS, 1))
         self.assert_same_shape(reward_to_go, td_error)
@@ -95,7 +103,7 @@ class A2CClippedAlgorithm(Algorithm):
         Actor update using Clip-PPO
         """
         initial_probs = None
-        for iteration in range(self.num_learning_per_epoch_actor):
+        for _ in range(self.num_learning_per_epoch_actor):
             with tf.GradientTape() as a_tape:
                 probs = agent.policy_net(self.s)
                 probs = probs * self.m
@@ -107,38 +115,15 @@ class A2CClippedAlgorithm(Algorithm):
 
                 if initial_probs is None:
                     initial_probs = tf.convert_to_tensor(tf.stop_gradient(selected_actions_probs))
-                self.assert_same_shape(selected_actions_probs, initial_probs)
+                importance_sampling_ratio = selected_actions_probs / (initial_probs + 1e-8)
 
-                remove_extreme_p = (
-                        1-tf.cast(tf.logical_or(
-                            tf.logical_and(selected_actions_probs > 0.95, td_error > 0),
-                            tf.logical_and(selected_actions_probs < 0.05, td_error < 0)
-                        ), tf.float32) ) + \
-                        self.d # for the last step (p will always be 1)
-                self.assert_same_shape(remove_extreme_p, selected_actions_probs)
+                self.assert_same_shape(td_error, importance_sampling_ratio)
 
-                r_theta = selected_actions_probs / (initial_probs + self.epsilon)
+                loss_actor = td_error * tf.clip_by_value(importance_sampling_ratio, 1 - self.clip_eps, 1 + self.clip_eps)
 
-                self.assert_same_shape(r_theta, selected_actions_probs)
+                self.assert_same_shape(loss_actor, (BS, 1))
 
-                clipped_r_theta = tf.clip_by_value(r_theta, 1 - self.clip_eps, 1 + self.clip_eps)
-
-                self.assert_same_shape(clipped_r_theta, r_theta)
-
-                non_masked_probs = tf.cast(r_theta == clipped_r_theta, tf.float32)
-                ratio = tf.reduce_mean(non_masked_probs)
-                if ratio < 0.5:
-                    print(f"breaking at {iteration}")
-                    break
-
-                self.assert_same_shape(non_masked_probs, selected_actions_probs)
-                self.assert_same_shape(non_masked_probs, val)
-                self.assert_same_shape(ratio, [])
-
-                loss_actor = -td_error * clipped_r_theta * ratio * remove_extreme_p
-                self.assert_same_shape(loss_actor, selected_actions_probs)
-
-                loss_actor = tf.reduce_mean(loss_actor)
+                loss_actor = tf.reduce_mean(-loss_actor)
                 self.assert_same_shape(loss_actor, [])
 
             grad_actor = a_tape.gradient(loss_actor, agent.policy_net.trainable_weights)
@@ -154,7 +139,7 @@ class A2CClippedAlgorithm(Algorithm):
                 self.assert_same_shape(val, (BS, 1))
                 self.assert_same_shape(new_val, (BS, 1))
 
-                reward_to_go = tf.stop_gradient(self.r + self.discount * new_val * (1-self.d))
+                reward_to_go = tf.stop_gradient(self.r + self.discount * new_val * (1 - self.d))
                 self.assert_same_shape(reward_to_go, (BS, 1))
 
                 loss_critic = tf.losses.mean_squared_error(val, reward_to_go)[:, None]
@@ -175,8 +160,5 @@ class A2CClippedAlgorithm(Algorithm):
         self.sn = []
         self.m = []
         self.d = []
-        """print()
-        print(np.array(probs[0:2]).round(2))
-        print(np.array(val[0:20]).squeeze().round(2))"""
 
         return loss / (iterations + 1e-10)
