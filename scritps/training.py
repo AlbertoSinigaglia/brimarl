@@ -2,6 +2,8 @@ import os
 import shutil
 import random
 import numpy as np
+import tqdm
+from tqdm import tqdm
 from brimarl_masked.environment.emulate import play_episode
 from brimarl_masked.agents.random_agent import RandomAgent
 from brimarl_masked.agents.scripted_ai_agent import ScriptedAIAgent
@@ -9,10 +11,24 @@ from brimarl_masked.scritps.evaluate import evaluate
 from brimarl_masked.algorithms.algorithm import Algorithm
 from brimarl_masked.environment.environment import Agent, BriscolaGame
 import json
-import time
+
+
+"""def profile(func):
+    from functools import wraps
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        from line_profiler import LineProfiler
+        prof = LineProfiler()
+        try:
+            return prof(func)(*args, **kwargs)
+        finally:
+            prof.print_stats()
+
+    return wrapper"""
 
 def print_win_rate(epoch, name, win_rate):
-    print(f"Episode: {epoch} - Win rate {name}: {win_rate}")
+    print(f"\tEpisode: {epoch} - Win rate {name}: {win_rate}")
 
 
 class Training:
@@ -27,7 +43,7 @@ class Training:
         self.evaluate_every = evaluate_every
         self.num_evaluations = num_evaluations
         self.from_savings = from_savings
-        self.save_dir = save_dir or f"../models_savings/{game.num_players}/{type(self.agent).__name__}"
+        self.save_dir = save_dir or f"../models_savings/{game.num_players}/{self.agent.name}"
 
     def train(self):
         win_rates = []
@@ -35,23 +51,16 @@ class Training:
         self.prepare_saving_folder()
 
         loss = None
-        start = time.time()
-        for epoch in range(1, self.num_epochs + 1):
-            if epoch % 50 == 0:
-                print(f"\nEpoch {epoch}")
-                t = int((time.time() - start) / epoch * (self.num_epochs - epoch))
-                print(f"Estimated remaining time: {t//3600}h {(t%3600)//60}m {t%60}s")
-            else:
-                print('.', end='')
+        for epoch in tqdm(range(1, self.num_epochs + 1), position=0, leave=True, desc="Epochs", smoothing=0.):
 
             self.on_new_epoch(epoch)
             for i in range(self.num_game_per_epoch):
                 self.simulate_and_store()
-            loss = self.agent_algorithm.learn(self.agent) or loss
+            loss = self.learn() or loss
 
             if epoch % self.evaluate_every == 0:
                 win_rates.append(self.evaluate_step(epoch))
-                print(f"Loss : {loss:.2f}")
+                print(f"\tLoss : {loss:.2f}")
                 self.save_models_and_win_rate(win_rates)
 
         return win_rates
@@ -64,8 +73,8 @@ class Training:
             json.dump(win_rates, file)
 
     def evaluate_step(self, epoch):
-        print('-' * 30)
-        print(f"Epoch {epoch} / {self.num_epochs}")
+        #print('-' * 30)
+        #print(f"Epoch {epoch} / {self.num_epochs}")
         return self.evaluate(epoch)
 
     def evaluation_score(self, players):
@@ -102,6 +111,37 @@ class Training:
     def evaluate(self, epoch):
         raise NotImplementedError
 
+    def learn(self):
+        return self.agent_algorithm.learn(self.agent)
+
+
+class TrainingBestResponse(Training):
+    def __init__(self, num_epochs: int, num_game_per_epoch: int, game: BriscolaGame, agent: Agent,
+                 agent_algorithm: Algorithm, evaluate_every: int, num_evaluations: int, enemy: Agent,
+                 from_savings: bool = True, save_dir: str = None):
+        super().__init__(num_epochs, num_game_per_epoch, game, agent, agent_algorithm, evaluate_every, num_evaluations, from_savings, save_dir)
+        self.enemy = enemy
+
+    def evaluate(self, epoch):
+        scripted_game_players = [self.agent.clone(training=False), ScriptedAIAgent()] if self.game.num_players == 2 else \
+            [self.agent.clone(training=False), self.enemy.clone(), self.agent.clone(training=False), self.enemy.clone()]
+        win_rate_script = self.evaluation_score(scripted_game_players)
+        print_win_rate(epoch, "EnemyAgent", win_rate_script)
+        return win_rate_script
+
+    def simulate_and_store(self):
+        if self.game.num_players == 2:
+            states, actions, masks, rewards, dones = play_episode(self.game, [self.agent.clone(), self.enemy.clone()],
+                                                                  train=True)
+            self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+        else:
+            states, actions, masks, rewards, dones = play_episode(
+                self.game,
+                [self.agent.clone(), self.enemy.clone(), self.agent.clone(), self.enemy.clone()],
+                train=True
+            )
+            self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+            self.agent_algorithm.store_game(states[2], actions[2], masks[2], rewards[2], dones[2])
 
 class TrainingScripted(Training):
     def evaluate(self, epoch):
@@ -161,6 +201,138 @@ class TrainingSelfPlay(Training):
             self.agent_algorithm.store_game(states[1], actions[1], masks[1], rewards[1], dones[1])
             self.agent_algorithm.store_game(states[2], actions[2], masks[2], rewards[2], dones[2])
             self.agent_algorithm.store_game(states[3], actions[3], masks[3], rewards[3], dones[3])
+
+class TrainingSelfPlayOracle(Training):
+
+    def __init__(self, num_epochs: int, num_game_per_epoch: int, game: BriscolaGame,
+                 agent1: Agent, agent_algorithm1: Algorithm,
+                 evaluate_every: int, num_evaluations: int, from_savings: bool = True, save_dir: str = None):
+        super().__init__(num_epochs, num_game_per_epoch, game, agent1, agent_algorithm1, evaluate_every, num_evaluations, from_savings, save_dir)
+        assert game.num_players == 4
+
+    def evaluate(self, epoch):
+        win_rate_random = self.evaluation_score(
+            [self.agent.clone(training=False), RandomAgent(), self.agent.clone(training=False), RandomAgent()]
+        )
+        print_win_rate(epoch, "RandomAgent", win_rate_random)
+        return win_rate_random
+
+    def simulate_and_store(self):
+        states, actions, masks, rewards, dones = play_episode(
+            self.game,
+            [self.agent.clone(), self.agent.clone(), self.agent.clone(), self.agent.clone()],
+            train=True
+        )
+        self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+        self.agent_algorithm.store_game(states[1], actions[1], masks[1], rewards[1], dones[1])
+        self.agent_algorithm.store_game(states[2], actions[2], masks[2], rewards[2], dones[2])
+        self.agent_algorithm.store_game(states[3], actions[3], masks[3], rewards[3], dones[3])
+        print()
+        print(np.array(states[0])[:,0])
+        print(np.array(states[1])[:, 0])
+        print(np.array(states[2])[:, 0])
+        print(np.array(states[3])[:, 0])
+
+        exit(999)
+
+class TrainingSelfPlayOracle2(Training):
+
+    def __init__(self, num_epochs: int, num_game_per_epoch: int, game: BriscolaGame,
+                 agent1: Agent, agent_algorithm1: Algorithm,  agent2: Agent, agent_algorithm2: Algorithm,
+                 evaluate_every: int, num_evaluations: int, from_savings: bool = True, save_dir: str = None):
+        super().__init__(num_epochs, num_game_per_epoch, game, agent1, agent_algorithm1, evaluate_every, num_evaluations, from_savings, save_dir)
+        assert game.num_players == 4
+        self.agent2 = agent2
+        self.agent_algorithm2 = agent_algorithm2
+
+    def learn(self):
+        self.agent_algorithm2.learn(self.agent2)
+        return super().learn()
+
+    def evaluate(self, epoch):
+        win_rate_random = self.evaluation_score(
+            [self.agent.clone(training=False), RandomAgent(), self.agent.clone(training=False), RandomAgent()]
+        )
+        print_win_rate(epoch, "RandomAgent", win_rate_random)
+        return win_rate_random
+
+    def simulate_and_store(self):
+        states, actions, masks, rewards, dones = play_episode(
+            self.game,
+            [self.agent.clone(), self.agent2.clone(), self.agent.clone(), self.agent2.clone()],
+            train=True
+        )
+        """print(np.argmax(actions[0], axis=-1))
+        print(np.argmax(actions[2], axis=-1))
+        print()
+
+        print(np.argmax(actions[1], axis=-1))
+        print(np.argmax(actions[3], axis=-1))
+        raise Exception"""
+        self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+        self.agent_algorithm.store_game(states[1], actions[1], masks[1], rewards[1], dones[1])
+        self.agent_algorithm2.store_game(states[2], actions[2], masks[2], rewards[2], dones[2])
+        self.agent_algorithm2.store_game(states[3], actions[3], masks[3], rewards[3], dones[3])
+        """print(np.array(self.agent_algorithm.s)[:,0,(0,3)]*10)
+        print(np.array(self.agent_algorithm.sn)[:,0, (0,3)] * 10)
+        raise Exception"""
+
+
+class TrainingAdversarialSelfPlay(Training):
+
+    def load_models(self):
+        if self.from_savings:
+            print("Loading models from memory")
+            try:
+                self.agent.load_model(path=self.save_dir + "/latest")
+                self.enemy.load_model(path=self.save_dir + "/latest")
+                print("Loaded from memory")
+            except Exception as e:
+                print(f"\n!!!! Unable to load or find files: {e.args[1]} !!!\n")
+        else:
+            print("Skipping loading models from memory")
+
+    def save_models_and_win_rate(self, win_rates):
+        super().save_models_and_win_rate(win_rates)
+        self.enemy.save_model(path=self.save_dir + "/latest")
+        self.enemy.save_model(path=self.save_dir + f"/history/{len(win_rates)}")
+
+    def __init__(self, num_epochs: int, num_game_per_epoch: int, game: BriscolaGame, agent: Agent,
+                 agent_algorithm: Algorithm, enemy_agent: Agent, enemy_agent_algorithm: Algorithm, evaluate_every: int,
+                 num_evaluations: int, from_savings: bool = True, save_dir: str = None):
+        super().__init__(num_epochs, num_game_per_epoch, game, agent, agent_algorithm, evaluate_every, num_evaluations, from_savings, save_dir)
+        assert game.num_players == 2
+        self.enemy = enemy_agent
+        self.enemy_algorithm = enemy_agent_algorithm
+
+    def evaluate(self, epoch):
+        win_rate_script = self.evaluation_score([self.agent.clone(training=False), ScriptedAIAgent()])
+        print_win_rate(epoch, "ScriptedAIAgent", win_rate_script)
+        win_rate_random = self.evaluation_score([self.agent.clone(training=False), RandomAgent()])
+        print_win_rate(epoch, "RandomAgent", win_rate_random)
+        return win_rate_script, win_rate_random
+
+    def simulate_and_store(self):
+        states, actions, masks, rewards, dones = play_episode(
+            self.game,
+            [self.agent.clone(), self.enemy.clone()],
+            train=True
+        )
+        self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+        self.enemy_algorithm.store_game(states[1], actions[1], masks[1], rewards[1], dones[1])
+
+        states, actions, masks, rewards, dones = play_episode(
+            self.game,
+            [self.agent.clone(), self.agent.clone()],
+            train=True
+        )
+        self.agent_algorithm.store_game(states[0], actions[0], masks[0], rewards[0], dones[0])
+        self.agent_algorithm.store_game(states[1], actions[1], masks[1], rewards[1], dones[1])
+
+    def learn(self):
+        self.enemy_algorithm.learn(self.enemy)
+        return super().learn()
+
 
 class TrainingSelfPlayMAPPO(TrainingSelfPlay):
     def simulate_and_store(self):

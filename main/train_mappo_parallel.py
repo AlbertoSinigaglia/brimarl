@@ -10,7 +10,7 @@ def main(argv=None):
     np.set_printoptions(linewidth=500, threshold=np.inf)
     logger = BriscolaLogger(BriscolaLogger.LoggerLevels.TRAIN)
     game = BriscolaGameID(4, logger, win_extra_points=0)
-    agent = MappoAgentQuick()
+    agent = MappoAgentQuick(name="MappoACAgent")
     episodes = 299
     evaluate_every = 1000
     num_evaluation = 500

@@ -13,7 +13,7 @@ def main(argv=None):
     logger = BriscolaLogger(BriscolaLogger.LoggerLevels.TRAIN)
     game = BriscolaGame(2, logger, win_extra_points=0)
 
-    agent = ACAgentQuick()
+    agent = ACAgentQuick(name="A2CClipACAgent")
     episodes = 50000
     evaluate_every = 1000
     num_evaluation = 1000

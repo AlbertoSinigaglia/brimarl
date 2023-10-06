@@ -16,6 +16,12 @@ class Actor(tf.keras.models.Model):
             tf.keras.layers.Dense(128, activation="linear"),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Activation(activation=fc_activation),
+            tf.keras.layers.Dense(128, activation="linear"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Activation(activation=fc_activation),
+            tf.keras.layers.Dense(128, activation="linear"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Activation(activation=fc_activation),
             tf.keras.layers.Dense(output_dim, activation=tf.nn.softmax,
                                   kernel_initializer=tf.initializers.RandomNormal(stddev=0.005),
                                   bias_initializer=tf.initializers.RandomNormal(stddev=0.005))
@@ -30,6 +36,12 @@ class Critic(tf.keras.models.Model):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.model = tf.keras.Sequential([
+            tf.keras.layers.Dense(128, activation="linear"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Activation(activation=fc_activation),
+            tf.keras.layers.Dense(128, activation="linear"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Activation(activation=fc_activation),
             tf.keras.layers.Dense(128, activation="linear"),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Activation(activation=fc_activation),

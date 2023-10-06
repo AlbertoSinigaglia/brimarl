@@ -21,27 +21,27 @@ class ACAgentQuick(Agent):
     def policy_net(self):
         if getattr(self, '_POLICY_NET', None) is None:
             self._POLICY_NET = Actor()
-            self._POLICY_NET.build((None, 244))  # 80))
+            self._POLICY_NET.build((None, 284))  # 80))
         return self._POLICY_NET
 
     @property
     def value_net(self):
         if getattr(self, '_VALUE_NET', None) is None:
             self._VALUE_NET = Critic()
-            self._VALUE_NET.build((None, 244))  # 80))
+            self._VALUE_NET.build((None, 284))  # 80))
         return self._VALUE_NET
 
     @policy_net.setter
     def policy_net(self, policy: tf.keras.Model):
         self._POLICY_NET = policy
         if not policy.built:
-            self._POLICY_NET.build((None, 244))  # 80))
+            self._POLICY_NET.build((None, 284))  # 80))
 
     @value_net.setter
     def value_net(self, value):
         self._VALUE_NET = value
         if not value.built:
-            self._VALUE_NET.build((None, 244))  # 80))
+            self._VALUE_NET.build((None, 284))  # 80))
 
     def state(self, env: BriscolaGame, player: BriscolaPlayer, current_player: BriscolaPlayer):
         """
@@ -79,10 +79,14 @@ class ACAgentQuick(Agent):
             player_hand_cards[card.id, 0] = 1
             player_hand_cards[card.id, 1] = 1 if card.seed == env.briscola.seed else 0
 
-        played_cards = np.zeros((40,2))
+        played_cards = np.zeros((40, 3))
+        # if "my" team started -> our card - enemy's card - our card - ...
+        our_turn = 1 if env.players_order[0] in [player.id, env.get_teammate(player.id)] else 0
         for i, card in enumerate(env.played_cards):
-            played_cards[card.id] = 1
+            played_cards[card.id, 0] = 1
             played_cards[card.id, 1] = 1 if card.seed == env.briscola.seed else 0
+            # if we started the turn, the odds position cards are our
+            played_cards[card.id, 2] = (i + our_turn) % 2
             self.current_game_state[card.id, 0] = 1
             self.current_game_state[card.id, 1] = 1 if card.seed == env.briscola.seed else 0
 

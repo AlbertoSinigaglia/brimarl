@@ -10,8 +10,8 @@ def main(argv=None):
     logger = BriscolaLogger(BriscolaLogger.LoggerLevels.TRAIN)
     game = BriscolaGame(4, logger, win_extra_points=0)
 
-    agent = MappoAgentQuick()
-    episodes = 299
+    agent = MappoAgentQuick(name="MappoACAgent")
+    episodes = 100_000
     evaluate_every = 1000
     num_evaluation = 500
     training = TrainingSelfPlayMAPPO(
@@ -23,11 +23,11 @@ def main(argv=None):
             discount=1.,
             min_samples=512,
             epsilon=1e-8,
-            num_learning_per_epoch_actor=10,
-            num_learning_per_epoch_critic=3,
+            num_learning_per_epoch_actor=15,
+            num_learning_per_epoch_critic=5,
             clip_eps=0.1,
-            lr_actor=1e-4,
-            lr_critic=3e-4
+            lr_actor=5e-4,
+            lr_critic=5e-4
         ),
         evaluate_every=evaluate_every,
         num_evaluations=num_evaluation,

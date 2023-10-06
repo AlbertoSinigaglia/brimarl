@@ -102,33 +102,43 @@ class A2CQAlgorithm(Algorithm):
         self.d = np.array(self.d)
         self.m = np.array(self.m)
 
-        initial_selected_probs = None
+        BS = self.s.shape[0]
+
+        self.assert_same_shape(self.s, (BS, self.s.shape[1]))
+        self.assert_same_shape(self.a, (BS, self.a.shape[1]))
+        self.assert_same_shape(self.r, (BS, 1))
+        self.assert_same_shape(self.sn, self.s)
+        self.assert_same_shape(self.d, (BS, 1))
+        self.assert_same_shape(self.m, self.a)
+
+        q = agent.q_net(self.s)
+        initial_probs = None
         for _ in range(self.num_learning_per_epoch):
             with tf.GradientTape() as a_tape:
                 probs = agent.policy_net(self.s)
                 probs = probs * self.m
                 probs = probs / tf.reduce_sum(probs, axis=-1, keepdims=True)
-                q = agent.q_net(self.s)
+                self.assert_same_shape(probs, self.a)
+
+                selected_actions_probs = tf.reduce_sum(probs * self.a, axis=-1, keepdims=True)
+                self.assert_same_shape(selected_actions_probs, (BS, 1))
+
+                if initial_probs is None:
+                    initial_probs = tf.convert_to_tensor(tf.stop_gradient(selected_actions_probs))
+                importance_sampling_ratio = selected_actions_probs / (initial_probs + 1e-8)
                 td_error = tf.stop_gradient(tf.reduce_sum(q * self.a, axis=-1) - tf.reduce_sum(q * probs, axis=-1))
-                selected_actions_probs = tf.reduce_sum(probs * self.a, axis=-1)
+                self.assert_same_shape(td_error, importance_sampling_ratio)
 
-                if initial_selected_probs is None: initial_selected_probs = tf.stop_gradient(selected_actions_probs)
-                entropy = self.entropy_beta * tf.reduce_mean(tf.reduce_sum(probs * tf.math.log(probs + self.epsilon + 1-self.m) * self.m, axis=-1))
-                if np.any(selected_actions_probs.numpy() == 0):
-                    raise Exception("action prob is zero lol, something is messed up")
-                if tf.math.is_nan(entropy) or entropy == 0 and self.entropy_beta > 0:
-                    raise Exception(f"entropy messed up: {entropy}")
+                loss_actor = td_error * importance_sampling_ratio
 
-                # mathematically they should be the same, but you never know
-                if self.num_learning_per_epoch > 1:
-                    loss_actor = tf.reduce_mean(-td_error * selected_actions_probs/initial_selected_probs)# + entropy
-                else:
-                    loss_actor = tf.reduce_mean(-td_error * tf.math.log(selected_actions_probs))
+                self.assert_same_shape(loss_actor, (BS, 1))
+
+                loss_actor = tf.reduce_mean(-loss_actor)
+                self.assert_same_shape(loss_actor, [])
 
             grad_actor = a_tape.gradient(loss_actor, agent.policy_net.trainable_weights)
             self.optimizer_actor.apply_gradients(zip(grad_actor, agent.policy_net.trainable_weights))
 
-        print(np.array(probs[0:2]).round(2))
 
         self.s = []
         self.a = []
@@ -176,14 +186,23 @@ class A2CQAlgorithm(Algorithm):
                 masks = tf.convert_to_tensor(np.array(masks), dtype=tf.float32, )
                 next_masks = tf.convert_to_tensor(np.array(next_masks), dtype=tf.float32, )
 
+                self.assert_same_shape(states, (self.batch_size, states.shape[1]))
+                self.assert_same_shape(actions, (self.batch_size, actions.shape[1]))
+                self.assert_same_shape(rewards, (self.batch_size, 1))
+                self.assert_same_shape(next_states, states)
+                self.assert_same_shape(done, (self.batch_size, 1))
+                self.assert_same_shape(masks, actions)
+
                 with tf.GradientTape() as tape:
                     q_values = agent.policy_net(states)
                     q_values = tf.reduce_sum(q_values * actions, axis=-1)
                     with tape.stop_recording():
                         target_q_values = self.target_net(next_states) + (1-next_masks) * np.finfo(np.float32).min
+                        self.assert_same_shape(target_q_values, actions)
                         target_q_values = tf.reduce_max(target_q_values, axis=-1)
-
+                    self.assert_same_shape(target_q_values, done)
                     target = tf.stop_gradient(rewards + (self.discount * target_q_values * (1 - done)))
+                    self.assert_same_shape(target, q_values)
                     loss = tf.reduce_mean(tf.losses.mean_squared_error(tf.stop_gradient(target), q_values))
 
                 grad = tape.gradient(loss, agent.policy_net.trainable_weights)

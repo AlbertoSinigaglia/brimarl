@@ -1,27 +1,29 @@
 import argparse
 from statistics import mean
+from tqdm.auto import tqdm
 from brimarl_masked.agents.random_agent import RandomAgent
 from brimarl_masked.agents.scripted_ai_agent import ScriptedAIAgent as AIAgent
 from brimarl_masked.scritps.graphic_visualizations import stats_plotter
 import brimarl_masked.environment.environment as brisc
 from brimarl_masked.environment.utils import BriscolaLogger, NetworkTypes
 from brimarl_masked.environment.emulate import play_episode
-from tqdm import trange
-import  tensorflow as tf
+import time
 def evaluate(game, agents, num_evaluations):
     """Play num_evaluations games and report statistics."""
     total_wins = [0] * len(agents)
-    points_history = [[] for _ in range(len(agents))]
-    for _ in trange(num_evaluations):
+    points_history = [[0] for _ in range(len(agents))]
+    print()
+    time.sleep(0.1)
+    for _ in tqdm(range(num_evaluations), desc="\tEval", position=0, smoothing=0.):
         game_winner_id, winner_points = play_episode(game, agents, train=False)
         for player in game.players:
             points_history[player.id].append(player.points)
             if player.id == game_winner_id or player.id == game.get_teammate(game_winner_id):
                 total_wins[player.id] += 1
 
-    print(f"\nTotal wins: {total_wins}.")
+    print(f"\tTotal wins: {total_wins}.")
     for i in range(len(agents)):
-        print(f"{agents[i].name} {i} won {total_wins[i]/num_evaluations:.2%} with an average of {mean(points_history[i]):.2f} points.")
+        print(f"\t{agents[i].name} {i} won {total_wins[i]/num_evaluations:.2%} with an average of {mean(points_history[i]):.2f} points.")
 
     return total_wins, points_history
 
